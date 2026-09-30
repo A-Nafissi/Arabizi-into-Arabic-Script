@@ -2,8 +2,20 @@ import hashlib
 import json
 from pathlib import Path
 
+import nbformat
+
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+def test_notebook_conforms_to_nbformat_schema():
+    notebook = nbformat.read(ROOT / "Maghribi_NLP_success.ipynb", as_version=4)
+    nbformat.validate(notebook)
+    for cell in notebook.cells:
+        if cell.cell_type == "code":
+            assert "execution_count" in cell
+            assert cell.execution_count is None
+            assert cell.outputs == []
 
 
 def test_split_ids_and_optional_local_files_match_manifest():
