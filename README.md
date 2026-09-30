@@ -63,7 +63,7 @@ included.
 
 ```text
 .
-|-- Maghribi_NLP_success.ipynb       # Rule, MLE, LSTM, and analysis notebook
+|-- maghribi_arabizi_deromanization_experiments.ipynb  # Rule, MLE, LSTM, and analysis notebook
 |-- data/                            # Split IDs, expected hashes, and local-data instructions
 |-- pretrained_baseline/             # Resumable full-passage mT5 runner
 |-- evaluation/                      # Portable metric and scoring commands
@@ -99,7 +99,7 @@ The successful mT5 run used an NVIDIA L4 with 22 GiB. See
 
 1. Obtain the gated source data, reconstruct or receive the authorized frozen exports, and place them locally as described in `data/README.md`.
 2. Verify their hashes against `data/README.md` or `reproducibility/run_manifest.json`.
-3. Open `Maghribi_NLP_success.ipynb` and execute the cells sequentially for the rule, MLE, and LSTM systems.
+3. Open `maghribi_arabizi_deromanization_experiments.ipynb` and execute the cells sequentially for the rule, MLE, and LSTM systems.
 4. Run `python -m unittest pretrained_baseline.test_baseline` for mT5 utility checks.
 5. Run `pytest` for metric regression tests.
 6. Fine-tune or resume mT5 using `pretrained_baseline/run_baseline.py`.

@@ -9,7 +9,9 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def test_notebook_conforms_to_nbformat_schema():
-    notebook = nbformat.read(ROOT / "Maghribi_NLP_success.ipynb", as_version=4)
+    notebook = nbformat.read(
+        ROOT / "maghribi_arabizi_deromanization_experiments.ipynb", as_version=4
+    )
     nbformat.validate(notebook)
     for cell in notebook.cells:
         if cell.cell_type == "code":
