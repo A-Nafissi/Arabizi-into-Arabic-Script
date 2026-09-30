@@ -1,0 +1,72 @@
+{
+  "original_sample_size": 100,
+  "paired_valid_labels": 100,
+  "annotator_A_counts": {
+    "aligned": 75,
+    "misaligned": 25
+  },
+  "annotator_B_counts": {
+    "aligned": 75,
+    "misaligned": 25
+  },
+  "observed_agreement_percent": 100.0,
+  "expected_agreement": 0.625,
+  "cohen_kappa": 1.0,
+  "confusion_matrix": {
+    "aligned": {
+      "aligned": 75,
+      "misaligned": 0,
+      "uncertain": 0
+    },
+    "misaligned": {
+      "aligned": 0,
+      "misaligned": 25,
+      "uncertain": 0
+    },
+    "uncertain": {
+      "aligned": 0,
+      "misaligned": 0,
+      "uncertain": 0
+    }
+  },
+  "agreed_label_counts": {
+    "aligned": 75,
+    "misaligned": 25
+  },
+  "disagreement_ids": [],
+  "suggested_span_disagreement_ids": [
+    "TRAIN_ALIGN_066"
+  ],
+  "validation_issues": [
+    {
+      "annotator": "A",
+      "id": "TRAIN_ALIGN_008",
+      "issue": "changed_source_field",
+      "field": "arabizi_context",
+      "expected": "'ostad ms3din. had chi kikhla3 khasna [[nw9fo]] m3 had lni9aba w nd3mohm 7it",
+      "actual": "ostad ms3din. had chi kikhla3 khasna [[nw9fo]] m3 had lni9aba w nd3mohm 7it"
+    },
+    {
+      "annotator": "B",
+      "id": "TRAIN_ALIGN_008",
+      "issue": "changed_source_field",
+      "field": "arabizi_context",
+      "expected": "'ostad ms3din. had chi kikhla3 khasna [[nw9fo]] m3 had lni9aba w nd3mohm 7it",
+      "actual": "ostad ms3din. had chi kikhla3 khasna [[nw9fo]] m3 had lni9aba w nd3mohm 7it"
+    }
+  ],
+  "input_files": [
+    {
+      "annotator": "A",
+      "file": "training_alignment_annotator_A_completed.xlsx",
+      "sha256": "10ecfe7dd995327c8bbe08c3ac2843539eeb67fc507f942e429aaa747d2db253"
+    },
+    {
+      "annotator": "B",
+      "file": "training_alignment_annotator_B_completed.xlsx",
+      "sha256": "18a2636307d16ef71a6717ec003b33a5658bb3deffd35c6af06c2d759ab56484"
+    }
+  ],
+  "independence": "The author confirmed that the two annotators completed their labels independently without seeing each other's decisions.",
+  "population": "Occurrence-weighted sample from equal-word-count training rows, not all corpus rows or deduplicated neural pair types."
+}

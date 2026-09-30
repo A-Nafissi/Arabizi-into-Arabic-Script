@@ -1,99 +1,145 @@
-# Breaking the Script Barrier: Automatic Transliteration of Maghribi Arabizi into Arabic Script
+# Breaking the Script Barrier
 
-[![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Domain: NLP](https://img.shields.io/badge/Domain-NLP%20%2F%20Transliteration-green.svg)](#)
-[![Paper: PDF](https://img.shields.io/badge/Paper-Download%20PDF-red.svg)](<Breaking the Script Barrier Automatic De_Romanization of Maghribi Arabizi to Arabic Script in Social Media.pdf>)
+**Automatic De-Romanization of Maghribi Arabizi to Arabic Script in Social Media**
 
-This research project investigates automatic de-romanization (transliteration) of **Maghribi Arabizi** (Moroccan Darija written in Latin script with numerical representations for Arabic phonemes) into standard Arabic script.
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/code-MIT-yellow.svg)](LICENSE)
+[![Dataset: CC BY-NC 4.0](https://img.shields.io/badge/data-CC%20BY--NC%204.0-orange.svg)](DATA_LICENSE.md)
+[![Paper: PDF](https://img.shields.io/badge/paper-camera--ready-red.svg)](<Breaking the Script Barrier Automatic De_Romanization of Maghribi Arabizi to Arabic Script in Social Media.pdf>)
 
-> 📄 **Read the Research Paper:** [Breaking the Script Barrier Automatic De_Romanization of Maghribi Arabizi to Arabic Script in Social Media.pdf](<Breaking the Script Barrier Automatic De_Romanization of Maghribi Arabizi to Arabic Script in Social Media.pdf>)
+This repository accompanies a paper accepted at the **9th International
+Conference on Arabic Language Processing (ICALP 2026)**. The included PDF is the
+author's camera-ready manuscript, not the final Springer version of record.
 
----
+The project evaluates automatic de-romanization of Moroccan Arabizi into Arabic
+script. The benchmark uses a frozen export derived from the UBC-NLP
+[NileChat Arabizi-Morocco](https://huggingface.co/datasets/UBC-NLP/nilechat-arabizi-mor)
+resource. Its Arabizi side was generated from Arabic-script Moroccan material
+with Command R+; the benchmark does not represent naturally authored Arabizi.
 
-## 📌 Project Overview
+## Systems
 
-Arabizi is widely used across social media and messaging platforms in the Maghrib region. Due to non-standardized orthography, phonetic variation, and heavy use of prefix clitics, processing Arabizi presents significant NLP challenges for low-resource languages.
+Four systems are compared on 8,045 parallel passages: 6,436 training, 804
+validation, and 805 held-out test pairs.
 
-This repository evaluates and benchmarks three distinct modeling paradigms on a parallel corpus of **8,045 parallel sentences** split into Training ($80\%$), Validation ($10\%$), and a Blind Test set ($10\%$):
+1. **Ordered regex mapper** using hand-authored numeral, digraph, consonant, and vowel rules.
+2. **Maximum-likelihood word mapper with regex fallback** for out-of-vocabulary tokens.
+3. **Word-level character LSTM encoder-decoder** trained on positionally aligned word pairs.
+4. **Full-passage `google/mt5-small`** fine-tuned on all training passages.
 
-1. **Rule-Based Baseline (Regex):** Hand-crafted character and n-gram transformation rules matching Arabizi numerals and digraphs to Arabic phonemes.
-2. **Statistical Maximum Likelihood Estimation (MLE) + Regex Fallback:** A word-alignment dictionary trained strictly on the training set, utilizing the rule-based regex model as a fallback for out-of-vocabulary (OOV) tokens.
-3. **Neural Character-Level Seq2Seq:** A TensorFlow/Keras encoder-decoder model trained character-by-character to learn end-to-end transliteration patterns.
+MLE and the LSTM use the 692 training passages whose Arabizi and Arabic sides
+have equal whitespace-token counts. mT5 uses all 6,436 training passages and
+external multilingual pretraining, so it is a practical stronger baseline rather
+than an architecture-controlled comparison.
 
----
+## Main results
 
-## 📊 Experimental Benchmarks & Results
+All systems use the same frozen 805-passage test set. Lower CER and WER are
+better; higher BLEU, chrF, and PosEM are better.
 
-All models were evaluated on the unseen **blind test set (805 samples)** using corpus-level **SacreBLEU** (`tokenize="intl"`), $1$-to-$4$-gram precisions, and **Exact Word Match Accuracy**.
+| System | BLEU | chrF | CER (%) | WER (%) | PosEM (%) |
+|---|---:|---:|---:|---:|---:|
+| Rule mapper | 7.24 | 46.73 | 24.50 | 72.50 | 8.69 |
+| MLE + regex | 35.44 | **69.60** | **15.17** | **42.48** | 16.76 |
+| Word LSTM | 9.62 | 51.98 | 44.94 | 69.00 | 9.42 |
+| mT5-small | **36.75** | 68.86 | 42.86 | 64.03 | **21.54** |
 
-| Model Architecture | SacreBLEU | 1-gram Precision | 2-gram Precision | 3-gram Precision | 4-gram Precision | Exact Word Match (%) |
-| :--- | :---: | :---: | :---: | :---: | :---: | :---: |
-| **Rule-Based (Regex)** | **7.19** | 35.23% | 12.51% | 4.41% | 1.58% | 8.56% |
-| **Statistical MLE (+ Regex Fallback)** | **35.37** | **67.76%** | **43.72%** | **29.05%** | **19.42%** | **16.75%** |
-| **Neural Seq2Seq (Char-level)** | **7.25** | 38.91% | 12.91% | 4.46% | 1.55% | 8.11% |
+The ranking is metric-dependent. mT5 has the highest BLEU and longer n-gram
+precision, while MLE has the strongest chrF, CER, and WER. Seventy-eight mT5
+outputs did not emit EOS before the frozen generation limit and are retained in
+the primary scores.
 
-### Key Findings
-* **Statistical MLE Dominance in Low-Resource Regimes:** Statistical word-level alignment with a rule-based fallback heavily outperforms vanilla Neural Seq2Seq ($35.37$ vs. $7.25$ BLEU).
-* **Data Scale Sensitivity:** 6,436 training pairs provide sufficient statistical coverage for direct word-level mapping, but are insufficient for un-annotated neural character-level seq2seq models to generalize without attention mechanisms or pre-trained embeddings.
-* **Leakage Verification:** The statistical dictionary was validated against a strict leakage audit (`mle_tokens - train_tokens = ∅`), confirming no evaluation bleed.
+## Human evaluation
 
----
+- Two native Moroccan Arabic speakers independently accepted all 300 sampled test references. Cohen's kappa is undefined because every label was positive.
+- Two independent annotators agreed that 75 of 100 sampled positional training pairs were aligned and 25 were misaligned, giving kappa 1.00.
+- The final review of 50 apparent LSTM errors contains 42 true model errors, 5 acceptable variants or non-errors, and 3 uncertain cases.
 
-## 🔍 Qualitative Error Taxonomy
+Only aggregate, anonymized annotation evidence is released in
+`reproducibility/`. Raw workbooks and reviewer-identifying information are not
+included.
 
-Error analysis on blind predictions revealed three main categories of system failure:
-
-1. **Phonetic Ambiguity & Orthographic Variation:** Multiple Latin character combinations mapped to single Arabic letters (e.g., `ee` / `i` / `y` $\rightarrow$ `ي`).
-2. **Clitic Attachment & Agglutination:** Arabizi prefix clitics (`l-` article, `f-` preposition, `k-` continuous aspect) merged into single tokens (e.g., `flmal3b` $\rightarrow$ `فالملعب`).
-3. **Numerical Transliteration Ambiguity:** Disambiguating numerals used phonetically (`7` = `ح`, `3` = `ع`) versus numeric dates/quantities (e.g., `2022`).
-
----
-
-## 📁 Repository Structure
+## Repository layout
 
 ```text
-Arabizi-into-Arabic-Script/
-├── README.md                              # Project documentation
-├── LICENSE                                # MIT Open-Source License
-├── requirements.txt                       # Python dependencies
-├── .gitignore                             # Git exclusion settings
-├── Breaking the Script Barrier...pdf      # Full paper (PDF)
-├── Maghribi_NLP_success.ipynb             # Full experiment notebook
-└── data/                                  # Parallel corpus splits
-    ├── toy_train.csv                      # Training dataset split (6,436 pairs)
-    ├── toy_val.csv                        # Validation dataset split (804 pairs)
-    └── toy_test.csv                       # Blind test dataset split (805 pairs)
+.
+|-- Maghribi_NLP_success.ipynb       # Rule, MLE, LSTM, and analysis notebook
+|-- data/                            # Split IDs, expected hashes, and local-data instructions
+|-- pretrained_baseline/             # Resumable full-passage mT5 runner
+|-- evaluation/                      # Portable metric and scoring commands
+|-- reproducibility/                 # Sanitized run records and aggregate evidence
+|-- paper/                           # Camera-ready LaTeX source and bibliography
+|-- tests/                           # Metric regression tests
+|-- requirements.txt                 # Notebook and evaluation dependencies
+|-- requirements-mt5.txt             # mT5-specific dependencies
+|-- DATA_LICENSE.md                  # Dataset attribution and reuse terms
+|-- CITATION.cff                     # Machine-readable project citation
+`-- Breaking the Script Barrier...pdf
 ```
 
----
+## Installation
 
-## 🚀 Getting Started
-
-### Prerequisites
-
-Clone the repository and install the dependencies:
+Create an isolated Python environment and install the notebook/evaluation stack:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### Running the Experiments
+For mT5, first install the CUDA-compatible PyTorch build recommended for the GPU
+runtime, then install:
 
-1. Open `Maghribi_NLP_success.ipynb` in Jupyter Notebook or VS Code.
-2. Execute cells sequentially to load the dataset from `data/`, train the MLE dictionary, build the Neural Seq2Seq model, and run the SacreBLEU evaluation suite.
+```bash
+pip install -r requirements-mt5.txt
+```
 
----
+The successful mT5 run used an NVIDIA L4 with 22 GiB. See
+`pretrained_baseline/README.md` for training, resumption, and prediction commands.
 
-## 📄 Citation
+## Reproduction
 
-If you find this work or dataset helpful for your research, please cite:
+1. Obtain the gated source data, reconstruct or receive the authorized frozen exports, and place them locally as described in `data/README.md`.
+2. Verify their hashes against `data/README.md` or `reproducibility/run_manifest.json`.
+3. Open `Maghribi_NLP_success.ipynb` and execute the cells sequentially for the rule, MLE, and LSTM systems.
+4. Run `python -m unittest pretrained_baseline.test_baseline` for mT5 utility checks.
+5. Run `pytest` for metric regression tests.
+6. Fine-tune or resume mT5 using `pretrained_baseline/run_baseline.py`.
+7. Score returned predictions using `python -m evaluation.evaluate_mt5_predictions --predictions PATH`.
+
+The selected mT5 weights and training checkpoints are not stored in Git. The
+exact original mT5 training script was not preserved; the released resumable
+runner differs from the successful run in evaluation/checkpoint frequency. The
+paper and run records state this limitation explicitly.
+
+## Data and licensing
+
+The code is MIT-licensed. The dataset is separately licensed under CC BY-NC 4.0
+and is subject to the upstream Hugging Face access conditions. The full frozen
+CSV exports are not distributed through Git. `data/split_ids.csv` preserves the
+8,045 split assignments without reproducing the passage text, and
+`DATA_LICENSE.md` documents provenance and reuse conditions. The historical
+local filenames `toy_*.csv` are retained for compatibility; they refer to the
+complete experimental splits, not toy examples.
+
+## Citation
 
 ```bibtex
-@article{nafissi2026arabizi,
-  title={Breaking the Script Barrier: Automatic Transliteration of Maghribi Arabizi into Arabic Script in Social Media},
-  author={Nafissi, A.},
-  journal={Local Publication},
-  year={2026}
+@inproceedings{nafissi2026breaking,
+  title     = {Breaking the Script Barrier: Automatic De-Romanization of Maghribi Arabizi to Arabic Script in Social Media},
+  author    = {Nafissi, Abdessamad},
+  booktitle = {Proceedings of the 9th International Conference on Arabic Language Processing},
+  year      = {2026}
+}
+```
+
+The source dataset requests citation of:
+
+```bibtex
+@inproceedings{el-mekki-etal-2025-nilechat,
+  title     = {{N}ile{C}hat: Towards Linguistically Diverse and Culturally Aware {LLM}s for Local Communities},
+  author    = {El Mekki, Abdellah and Atou, Houdaifa and Nacar, Omer and Shehata, Shady and Abdul-Mageed, Muhammad},
+  booktitle = {Proceedings of the 2025 Conference on Empirical Methods in Natural Language Processing},
+  year      = {2025},
+  pages     = {10978--11002},
+  doi       = {10.18653/v1/2025.emnlp-main.556}
 }
 ```

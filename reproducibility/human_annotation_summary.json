@@ -1,0 +1,34 @@
+{
+  "test_reference_review": {
+    "sample_size": 300,
+    "annotators": 2,
+    "independent_labeling": true,
+    "valid": 300,
+    "inaccurate": 0,
+    "uncertain": 0,
+    "observed_agreement_percent": 100.0,
+    "cohen_kappa": null,
+    "kappa_note": "Undefined because all labels are positive and expected chance agreement is 1."
+  },
+  "training_alignment_review": {
+    "sample_size": 100,
+    "annotators": 2,
+    "independent_labeling": true,
+    "aligned": 75,
+    "misaligned": 25,
+    "observed_agreement_percent": 100.0,
+    "cohen_kappa": 1.0
+  },
+  "lstm_error_review": {
+    "sample_size": 50,
+    "true_model_error": 42,
+    "acceptable_variant_or_not_error": 5,
+    "uncertain": 3,
+    "true_error_primary_categories": {
+      "lexical_substitution": 22,
+      "phonetic_ambiguity": 19,
+      "source_noise": 1
+    },
+    "adjudication_note": "Two reviewers examined the disputed w7a case with full context and agreed on uncertain, with other as the primary type and source_noise as a contributing factor."
+  }
+}

@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+message: "If you use this benchmark or code, please cite the ICALP 2026 paper."
+title: "Arabizi into Arabic Script"
+type: software
+authors:
+  - family-names: Nafissi
+    given-names: Abdessamad
+repository-code: "https://github.com/A-Nafissi/Arabizi-into-Arabic-Script"
+license: MIT
+preferred-citation:
+  type: conference-paper
+  title: "Breaking the Script Barrier: Automatic De-Romanization of Maghribi Arabizi to Arabic Script in Social Media"
+  authors:
+    - family-names: Nafissi
+      given-names: Abdessamad
+  collection-title: "Proceedings of the 9th International Conference on Arabic Language Processing"
+  year: 2026

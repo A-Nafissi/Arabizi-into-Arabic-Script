@@ -1,0 +1,127 @@
+{
+  "validation": {
+    "rows": 805,
+    "unique_ids": 805,
+    "source_rows_match_frozen_test": true,
+    "gold_rows_match_frozen_test": true,
+    "empty_predictions": 0,
+    "outputs_without_eos": 78,
+    "outputs_without_eos_percent": 9.68944099378882,
+    "generation_elapsed_seconds": 8719.206594701001,
+    "median_character_length_ratio": 0.9910667367314766,
+    "p95_character_length_ratio": 2.85760303182174,
+    "maximum_character_length_ratio": 6.3423255813953485,
+    "rows_over_twice_reference_characters": 87,
+    "input_tokens_maximum": 2109
+  },
+  "metrics": [
+    {
+      "subset": "All blind-test rows",
+      "rows": 805,
+      "BLEU": 36.74832041014184,
+      "chrF": 68.85787981213466,
+      "CER_percent": 42.85682812522553,
+      "WER_percent": 64.02705510326427,
+      "position_wise_exact_percent": 21.54157342449329,
+      "sentence_exact_percent": 0.0,
+      "character_edits": 564130,
+      "reference_characters": 1316313,
+      "word_edits": 139910,
+      "reference_words": 218517,
+      "precision_1": 56.22655335032661,
+      "precision_2": 41.365053353299615,
+      "precision_3": 31.772374202157792,
+      "precision_4": 24.67886926642413,
+      "BLEU_signature": "nrefs:1|case:mixed|eff:no|tok:intl|smooth:exp|version:2.6.0",
+      "chrF_signature": "nrefs:1|case:mixed|eff:yes|nc:6|nw:0|space:no|version:2.6.0"
+    },
+    {
+      "subset": "Reached EOS (diagnostic)",
+      "rows": 727,
+      "BLEU": 46.10660327462883,
+      "chrF": 74.05920023511138,
+      "CER_percent": 23.19862108233683,
+      "WER_percent": 42.88118217214812,
+      "position_wise_exact_percent": 22.75960980863226,
+      "sentence_exact_percent": 0.0,
+      "character_edits": 269719,
+      "reference_characters": 1162651,
+      "word_edits": 82819,
+      "reference_words": 193136,
+      "precision_1": 69.61780031930712,
+      "precision_2": 51.88581183290938,
+      "precision_3": 40.052133002733804,
+      "precision_4": 31.236182442774055,
+      "BLEU_signature": "nrefs:1|case:mixed|eff:no|tok:intl|smooth:exp|version:2.6.0",
+      "chrF_signature": "nrefs:1|case:mixed|eff:yes|nc:6|nw:0|space:no|version:2.6.0"
+    },
+    {
+      "subset": "No EOS (diagnostic)",
+      "rows": 78,
+      "BLEU": 9.671488649690788,
+      "chrF": 38.98820903833757,
+      "CER_percent": 191.59649099972668,
+      "WER_percent": 224.93597572987667,
+      "position_wise_exact_percent": 12.272960088254994,
+      "sentence_exact_percent": 0.0,
+      "character_edits": 294411,
+      "reference_characters": 153662,
+      "word_edits": 57091,
+      "reference_words": 25381,
+      "precision_1": 17.43682354520274,
+      "precision_2": 10.954503816793894,
+      "precision_3": 7.890264924141472,
+      "precision_4": 5.805259486777861,
+      "BLEU_signature": "nrefs:1|case:mixed|eff:no|tok:intl|smooth:exp|version:2.6.0",
+      "chrF_signature": "nrefs:1|case:mixed|eff:yes|nc:6|nw:0|space:no|version:2.6.0"
+    }
+  ],
+  "comparison": [
+    {
+      "Model": "Rule-Based",
+      "BLEU": 7.242054459100732,
+      "chrF": 46.729685594614686,
+      "CER_percent": 24.504506147094197,
+      "WER_percent": 72.496419042912,
+      "position_wise_exact_percent": 8.687195961870243
+    },
+    {
+      "Model": "Statistical MLE",
+      "BLEU": 35.4385212952767,
+      "chrF": 69.59689156424209,
+      "CER_percent": 15.170252060110323,
+      "WER_percent": 42.47861722428919,
+      "position_wise_exact_percent": 16.756591020378277
+    },
+    {
+      "Model": "Neural Seq2Seq",
+      "BLEU": 9.619273193552782,
+      "chrF": 51.98326723197675,
+      "CER_percent": 44.93642469534222,
+      "WER_percent": 68.99783540868674,
+      "position_wise_exact_percent": 9.42352311261824
+    },
+    {
+      "Model": "MLE only (copy OOV)",
+      "BLEU": 32.24309238157629,
+      "chrF": 54.66373630727717,
+      "CER_percent": 32.101939280399115,
+      "WER_percent": 45.20243276266835,
+      "position_wise_exact_percent": 16.026670693813298
+    },
+    {
+      "Model": "Pretrained mT5-small",
+      "BLEU": 36.74832041014184,
+      "chrF": 68.85787981213466,
+      "CER_percent": 42.85682812522553,
+      "WER_percent": 64.02705510326427,
+      "position_wise_exact_percent": 21.54157342449329
+    }
+  ],
+  "interpretation_guardrails": [
+    "All 805 frozen test rows are included in the primary metrics.",
+    "EOS subsets are diagnostic only and must not replace the primary corpus scores.",
+    "The 2,048-token generation limit was frozen before test evaluation and was not retuned.",
+    "This pretrained full-passage model uses all 6,436 training passages and is not an architecture-only comparison."
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "checked_table_cells": 84,
+  "table_transcription_errors": [],
+  "human_judgment_counts": {
+    "True model error": 42,
+    "Acceptable variant / not a model error": 5,
+    "Uncertain": 3
+  },
+  "id_prefix_overlap": [
+    {
+      "left": "train",
+      "right": "val",
+      "shared_id_prefixes": 28,
+      "affected_right_rows": 31
+    },
+    {
+      "left": "train",
+      "right": "test",
+      "shared_id_prefixes": 28,
+      "affected_right_rows": 38
+    },
+    {
+      "left": "val",
+      "right": "test",
+      "shared_id_prefixes": 9,
+      "affected_right_rows": 15
+    }
+  ],
+  "grouping_caveat": "Prefix means ID with its final underscore component removed. Upstream source-group meaning requires confirmation; not proof of duplicate text or leakage."
+}

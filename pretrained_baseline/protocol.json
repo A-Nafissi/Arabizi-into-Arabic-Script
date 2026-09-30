@@ -1,0 +1,15 @@
+{
+  "model": "google/mt5-small",
+  "revision": "73fb5dbe4756edadc8fbe8c769b0a109493acf7a",
+  "seed": 42,
+  "epochs": 3,
+  "learning_rate": 0.001,
+  "generation_max_new_tokens": 2048,
+  "split_sha256": {
+    "train": "c29fb3212cc586695b936ef8b6584b187353a9a981000d843958ef47e22c351f",
+    "val": "5e4dd8aec65faba7835a7fa794e9d1cac3b652b76caa999f8e663b50990e268f",
+    "test": "fb9c010ee6ce4340485149a7d61e33bb6510d06d5658e45751b2919e3625baad"
+  },
+  "input_truncation": false,
+  "target_truncation": false
+}

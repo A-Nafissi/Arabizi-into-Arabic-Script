@@ -1,0 +1,46 @@
+{
+  "Rule-Based": {
+    "BLEU": 7.338796714457017,
+    "chrF": 46.75742632982605,
+    "CER_percent": 24.5526697579154,
+    "WER_percent": 72.403564453125,
+    "position_wise_exact_percent": 8.839111328125,
+    "precision_1": 35.62481794348966,
+    "precision_2": 12.764230282170342,
+    "precision_3": 4.5227003724576775,
+    "precision_4": 1.5981959015589764
+  },
+  "Statistical MLE": {
+    "BLEU": 35.57534250854347,
+    "chrF": 69.74406165990291,
+    "CER_percent": 15.136078611457668,
+    "WER_percent": 42.31201171875,
+    "position_wise_exact_percent": 16.729736328125,
+    "precision_1": 67.7232114433668,
+    "precision_2": 43.76610104537035,
+    "precision_3": 29.192208291505587,
+    "precision_4": 19.602948424007373
+  },
+  "Neural Seq2Seq": {
+    "BLEU": 9.430792187854086,
+    "chrF": 51.75461915047453,
+    "CER_percent": 45.631951753762124,
+    "WER_percent": 69.2236328125,
+    "position_wise_exact_percent": 9.324951171875,
+    "precision_1": 43.61713930679448,
+    "precision_2": 16.225843797310535,
+    "precision_3": 6.140821158915248,
+    "precision_4": 2.318674914828761
+  },
+  "Pretrained mT5-small": {
+    "BLEU": 37.19615370698546,
+    "chrF": 69.47072528693293,
+    "CER_percent": 40.249155731475874,
+    "WER_percent": 61.512451171875,
+    "position_wise_exact_percent": 20.887451171875,
+    "precision_1": 56.49993312826,
+    "precision_2": 41.82867965005195,
+    "precision_3": 32.2467907789502,
+    "precision_4": 25.117912609911397
+  }
+}

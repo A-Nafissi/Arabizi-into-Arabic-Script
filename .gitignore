@@ -12,6 +12,43 @@ ENV/
 # Jupyter Notebook checkpoints
 .ipynb_checkpoints/
 
+# Experiment caches and large generated model artifacts
+hf_cache/
+checkpoints/
+selected_model/
+runs/
+outputs/
+tmp/
+*.safetensors
+*.pt
+*.pth
+*.keras
+*.pkl
+*.partial.jsonl
+*_console.log
+
+# LaTeX build products and rendered QA pages
+*.aux
+*.blg
+*.bbl
+*.log
+*.out
+*.toc
+*.synctex.gz
+contact_sheet.png
+page-*.png
+
+# Private or working annotation material
+private_annotations/
+*.xlsm
+*annotator_*_completed.csv
+*.backup.csv
+
+# Gated dataset exports are kept locally, never committed.
+data/toy_train.csv
+data/toy_val.csv
+data/toy_test.csv
+
 # OS specific files
 .DS_Store
 Thumbs.db
