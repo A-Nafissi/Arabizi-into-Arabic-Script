@@ -12,13 +12,14 @@
 - [x] Aggregate human-annotation outcomes and final adjudication counts recorded.
 - [x] Machine-readable project citation added.
 
-## Confirm before pushing `main`
+## Completed before pushing `main`
 
 - [x] Remove the gated CSV exports from the working tree and all Git history;
       retain verified local copies and publish only split IDs and hashes.
-- [ ] Review the complete staged diff and ensure no private annotation file or
+- [x] Review the complete staged diff and ensure no private annotation file or
       model checkpoint is present.
-- [ ] Fetch `origin/main` and confirm that it has not advanced.
+- [x] Fetch `origin/main`, confirm that it has not advanced, and replace it with
+      the verified rewritten history using `--force-with-lease`.
 
 ## Update after publication
 
