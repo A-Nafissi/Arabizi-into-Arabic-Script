@@ -139,7 +139,7 @@ The source dataset requests citation of:
   author    = {El Mekki, Abdellah and Atou, Houdaifa and Nacar, Omer and Shehata, Shady and Abdul-Mageed, Muhammad},
   booktitle = {Proceedings of the 2025 Conference on Empirical Methods in Natural Language Processing},
   year      = {2025},
-  pages     = {10978--11002},
+  pages     = {10967--10991},
   doi       = {10.18653/v1/2025.emnlp-main.556}
 }
 ```

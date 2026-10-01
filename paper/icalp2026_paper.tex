@@ -113,7 +113,7 @@ The legacy position-wise exact-match score, renamed \emph{position-wise token ag
 
 \subsection{Blind-Test Benchmark}
 
-Table~\ref{tab:main-results} gives the primary results. mT5 has the highest BLEU and PosEM, but MLE has the highest chrF and the lowest CER and WER. The finding is therefore metric-dependent. In particular, the LSTM improves over the regex baseline in BLEU and chrF but has worse CER, so it is not uniformly better.
+Table~\ref{tab:main-results} gives the primary results. mT5 has the highest BLEU and PosEM, but MLE has the highest chrF and the lowest CER and WER. The finding is therefore metric-dependent. In particular, the LSTM improves over the regex baseline in BLEU and chrF but has worse CER, so it is not uniformly better. The 1.31-point BLEU difference between mT5 and MLE is an observed point estimate; no paired significance test or confidence interval was computed, so it should not be interpreted as statistically established superiority.
 
 \begin{table}[H]
 \centering
@@ -222,7 +222,7 @@ mT5-small & \textbf{37.20} & 69.47 & 40.25 & 61.51 & \textbf{20.89} \\
 
 \subsection{Reviewed LSTM Errors}
 
-Sequence alignment was used to sample 50 apparent LSTM errors while reducing false pairings caused by word-position shifts. An initial human review classified 42 as true model errors, 6 as acceptable variants or non-errors, and 2 as uncertain. The reviewer could assign multiple contributing labels. For plotting, one primary label was selected by the fixed priority order lexical substitution, phonetic ambiguity, numerical transliteration, clitic segmentation, loanword/code-switching, punctuation, alignment shift, source noise, gold-reference issue, no error, and other. This reduction yields 22 lexical substitutions, 19 phonetic ambiguities, and one source-noise case among the 42 true errors; these are derived primary categories rather than mutually exclusive labels originally selected by the reviewer.
+The 50 apparent LSTM errors were drawn from the 300-row human-validated subset. Predicted and reference token sequences were lightly normalized for punctuation, Arabic diacritics, alef variants, and alef maqsura, then aligned with \texttt{SequenceMatcher}. Unequal-length replacement spans were excluded from the review pool to reduce false pairings caused by word-position shifts; 50 remaining cases were sampled with random seed 42. An initial human review classified 42 as true model errors, 6 as acceptable variants or non-errors, and 2 as uncertain. The reviewer could assign multiple contributing labels. For summary reporting, one primary label was selected by the fixed priority order lexical substitution, phonetic ambiguity, numerical transliteration, clitic segmentation, loanword/code-switching, punctuation, alignment shift, source noise, gold-reference issue, no error, and other. This reduction yields 22 lexical substitutions, 19 phonetic ambiguities, and one source-noise case among the 42 true errors; these are derived primary categories rather than mutually exclusive labels originally selected by the reviewer.
 
 For camera-ready adjudication, two reviewers re-examined the disputed case \textit{w7a} $\rightarrow$ \textarabic{والحال} (reference \textarabic{واخا}) with its full passage context and agreed that it should be labeled uncertain rather than acceptable. They assigned \textit{other} as the primary type and source noise as a contributing factor: in their rationale, 7 encodes \textarabic{ح}, whereas the contextual form requires the \textarabic{خ} sound, commonly encoded by 5. The final counts are therefore 42 true model errors, 5 acceptable variants or non-errors, and 3 uncertain cases. The small, error-conditioned sample cannot estimate corpus accuracy or the population distribution of error types, and no comparable human review was conducted for mT5.
 
@@ -269,6 +269,10 @@ The source-side Arabizi was generated from Arabic-script Moroccan material, so t
 The resource contains social-media-style language that may include noisy, personal, or sensitive material. The experiments do not attempt to identify users, infer personal attributes, or profile individuals. Any release of derived data or model outputs should follow the source license and minimize personally identifying content. Native-speaker annotations were used for linguistic quality control and are reported in aggregate.
 
 Generative AI tools were used for code debugging, editorial feedback, and manuscript revision support. The author verified the experimental claims, reported values, citations, and methodological descriptions against the executed notebooks, saved outputs, and annotation files.
+
+\paragraph{Data and Code Availability.} Code, split identifiers, file hashes, aggregate annotation summaries, and aggregate evaluation artifacts are available at \url{https://github.com/A-Nafissi/Arabizi-into-Arabic-Script}. Full passage text and raw annotation workbooks are not redistributed. Access to the source corpus remains governed by the upstream Hugging Face access conditions and CC BY-NC 4.0 license.
+
+\paragraph{Disclosure of Interests.} The author has no competing interests to declare that are relevant to the content of this article.
 
 \bibliographystyle{splncs04}
 \bibliography{custom}
