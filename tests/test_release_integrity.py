@@ -10,7 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def test_notebook_conforms_to_nbformat_schema():
     notebook = nbformat.read(
-        ROOT / "maghribi_arabizi_deromanization_experiments.ipynb", as_version=4
+        ROOT / "notebooks/02_baseline_training_and_evaluation.ipynb", as_version=4
     )
     nbformat.validate(notebook)
     for cell in notebook.cells:

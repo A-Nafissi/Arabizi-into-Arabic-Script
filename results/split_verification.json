@@ -1,0 +1,43 @@
+{
+  "verification_date": "2026-10-02",
+  "method": "Two sklearn train_test_split calls; test_size 0.2 then 0.5, random_state 42 for both",
+  "corpus_rows": 8045,
+  "exact_duplicate_sources": 0,
+  "exact_duplicate_targets": 0,
+  "exact_duplicate_pairs": 0,
+  "splits": {
+    "train": {
+      "rows": 6436,
+      "matches_frozen_content_and_order": true,
+      "matches_published_id_membership": true,
+      "csv_sha256": "c29fb3212cc586695b936ef8b6584b187353a9a981000d843958ef47e22c351f",
+      "matches_frozen_byte_hash": true,
+      "recovered_zip_csv_sha256": "d6d09d479e312fb80c721e4443d8616d9c07ae19e5b1b00dadec4f0c68643ad7",
+      "recovered_zip_matches_frozen_content_and_order": true
+    },
+    "val": {
+      "rows": 804,
+      "matches_frozen_content_and_order": true,
+      "matches_published_id_membership": true,
+      "csv_sha256": "5e4dd8aec65faba7835a7fa794e9d1cac3b652b76caa999f8e663b50990e268f",
+      "matches_frozen_byte_hash": true,
+      "recovered_zip_csv_sha256": "e6fd5dcabe9d8f22e478d9d3ce7168655ef4e8227ab711d8132f601ce45f80eb",
+      "recovered_zip_matches_frozen_content_and_order": true
+    },
+    "test": {
+      "rows": 805,
+      "matches_frozen_content_and_order": true,
+      "matches_published_id_membership": true,
+      "csv_sha256": "fb9c010ee6ce4340485149a7d61e33bb6510d06d5658e45751b2919e3625baad",
+      "matches_frozen_byte_hash": true,
+      "recovered_zip_csv_sha256": "13f8752539b8b79c0bc8e89a233bd234774dddf25bc3e6e6d53715447c989bcc",
+      "recovered_zip_matches_frozen_content_and_order": true
+    }
+  },
+  "limitations": [
+    "No original upstream retrieval, source revision, subset-selection or corpus-deduplication operation preserved.",
+    "Row splitting does not establish source-document independence or an untouched rule-development history.",
+    "CSV byte serialization is separate from decoded content equality."
+  ],
+  "passed": true
+}

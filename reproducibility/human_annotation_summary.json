@@ -19,6 +19,19 @@
     "observed_agreement_percent": 100.0,
     "cohen_kappa": 1.0
   },
+  "mt5_mle_output_review": {
+    "reviewed_passages": 60,
+    "random_passages": 50,
+    "additional_no_eos_diagnostic_passages": 10,
+    "annotators": 2,
+    "independent_and_blinded": true,
+    "status": "independent_labels_completed_not_adjudicated",
+    "manuscript_reporting": "archived_exploratory_not_in_main_results",
+    "random_preference_agreement_percent": 48.0,
+    "random_preference_cohen_kappa": 0.13448735019973365,
+    "pending_acceptability_disagreements": 2,
+    "aggregate_results_file": "mt5_mle_human_summary.json"
+  },
   "lstm_error_review": {
     "sample_size": 50,
     "true_model_error": 42,

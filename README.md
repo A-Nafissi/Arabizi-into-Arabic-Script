@@ -11,6 +11,10 @@ This repository accompanies a paper accepted at the **9th International
 Conference on Arabic Language Processing (ICALP 2026)**. The included PDF is the
 author's camera-ready manuscript, not the final Springer version of record.
 
+The GitHub repository is currently private. Request code and aggregate-artifact
+access from the author at **abdessamadnfs@gmail.com**. Repository access does not
+grant access to the upstream gated corpus or permit redistribution of passage text.
+
 The project evaluates automatic de-romanization of Moroccan Arabizi into Arabic
 script. The benchmark uses a frozen export derived from the UBC-NLP
 [NileChat Arabizi-Morocco](https://huggingface.co/datasets/UBC-NLP/nilechat-arabizi-mor)
@@ -49,6 +53,13 @@ precision, while MLE has the strongest chrF, CER, and WER. Seventy-eight mT5
 outputs did not emit EOS before the frozen generation limit and are retained in
 the primary scores.
 
+The post-hoc paired passage bootstrap uses 10,000 resamples and seed 42. The
+mT5-minus-MLE BLEU difference is 1.31, with a 95% percentile interval of
+[-0.55, 3.24] and SacreBLEU paired-bootstrap p = 0.074. This does not establish
+a BLEU advantage at the nominal 0.05 level or demonstrate equivalence. Intervals
+condition on the saved models and assume independent passages; source-document
+grouping and training-seed variation are not accounted for.
+
 ## Human evaluation
 
 - Two native Moroccan Arabic speakers independently accepted all 300 sampled test references. Cohen's kappa is undefined because every label was positive.
@@ -59,11 +70,27 @@ Only aggregate, anonymized annotation evidence is released in
 `reproducibility/`. Raw workbooks and reviewer-identifying information are not
 included.
 
+An exploratory blinded mT5/MLE output review was completed, but its dedicated
+results subsection and table are excluded from the camera-ready manuscript.
+The whole-passage criterion yielded nearly constant inaccuracy labels, reviewers
+differed in their preferences, and two acceptability judgments remain unresolved.
+The manuscript discloses this limitation and does not claim human-preference
+superiority for either model. No automatic scores or earlier audits were changed.
+
+For an auditable record, the aggregate results remain in
+`reproducibility/mt5_mle_human_summary.json`; the rubric and validation commands
+remain in `evaluation/HUMAN_COMPARISON.md`. Random and additional no-EOS groups
+are kept separate, and original labels are not overwritten. Raw packages and
+returned passage text stay local. Further adjudication is not required for the
+current manuscript scope.
+
 ## Repository layout
 
 ```text
 .
-|-- maghribi_arabizi_deromanization_experiments.ipynb  # Rule, MLE, LSTM, and analysis notebook
+|-- notebooks/                       # Numbered preprocessing, baseline, and mT5 notebooks
+|   `-- archive/                     # Sanitized recovered historical Colab notebook
+|-- results/                         # Verification records and result index
 |-- data/                            # Split IDs, expected hashes, and local-data instructions
 |-- pretrained_baseline/             # Resumable full-passage mT5 runner
 |-- evaluation/                      # Portable metric and scoring commands
@@ -95,15 +122,24 @@ pip install -r requirements-mt5.txt
 The successful mT5 run used an NVIDIA L4 with 22 GiB. See
 `pretrained_baseline/README.md` for training, resumption, and prediction commands.
 
+## Preprocessing and split provenance
+
+The recovered `notebooks/01_preprocessing_and_split.ipynb` loads an existing cleaned corpus, applies URL/repetition/punctuation cleaning and script/length filters, then performs two scikit-learn random splits with seed 42 (80/10/10). Reconstruction reproduced all archived partitions exactly in IDs, text, and row order. The clean corpus has no exact duplicate sources, targets, or pairs; the original deduplication operation, upstream subset selection, and dataset revision remain undocumented. Shared identifier prefixes leave source-document independence unverified, and the full history of test-informed rule development is unavailable.
+
+For an authorized clean corpus, place `clean_parallel_corpus.csv` in `data/` and run the focused preprocessing notebook. Existing matching exports are preserved byte-for-byte; differing existing exports cause an error. Verify with `python -m evaluation.verify_preprocessing --corpus data/clean_parallel_corpus.csv --splits data`.
+
+Run notebooks from the repository root. Baseline and mT5 notebooks load frozen partitions directly. The mT5 notebook is a new wrapper around the maintained runner, not the original training notebook. See `reproducibility/PROTOCOL.md` for settings and `results/split_verification.json` for reconstruction evidence.
+
 ## Reproduction
 
 1. Obtain the gated source data, reconstruct or receive the authorized frozen exports, and place them locally as described in `data/README.md`.
 2. Verify their hashes against `data/README.md` or `reproducibility/run_manifest.json`.
-3. Open `maghribi_arabizi_deromanization_experiments.ipynb` and execute the cells sequentially for the rule, MLE, and LSTM systems.
+3. Set the working directory to the repository root, then open `notebooks/02_baseline_training_and_evaluation.ipynb` and execute the cells sequentially for the rule, MLE, and LSTM systems.
 4. Run `python -m unittest pretrained_baseline.test_baseline` for mT5 utility checks.
 5. Run `pytest` for metric regression tests.
 6. Fine-tune or resume mT5 using `pretrained_baseline/run_baseline.py`.
 7. Score returned predictions using `python -m evaluation.evaluate_mt5_predictions --predictions PATH`.
+8. Run `python -m evaluation.compare_systems` with both local prediction files to regenerate paired BLEU uncertainty and the n-gram chart. See `reproducibility/README.md` for the full command.
 
 The selected mT5 weights and training checkpoints are not stored in Git. The
 exact original mT5 training script was not preserved; the released resumable

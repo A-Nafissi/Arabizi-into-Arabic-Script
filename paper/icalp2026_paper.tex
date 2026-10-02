@@ -1,6 +1,7 @@
 \documentclass[runningheads]{llncs}
 
 \usepackage{booktabs}
+\usepackage{graphicx}
 \usepackage{amsmath,amssymb}
 \usepackage{url}
 \usepackage{float}
@@ -40,13 +41,13 @@ Social media has accelerated the use of dialectal Arabic online. In the Maghreb,
 
 The task studied here is \emph{de-romanization}: converting an Arabizi string into Arabic script while preserving its dialectal lexical content. It differs from romanization, which maps native script to Latin script; from orthographic normalization, which standardizes variants within a script; and from translation into Modern Standard Arabic (MSA), which may change lexical and grammatical form. The distinction matters because multiple Arabic-script spellings may be acceptable for the same Darija input and because full-passage transliteration may benefit from context \citep{eryani-habash-2021-automatic,kirov-etal-2024-context}.
 
-The contribution is an audited experimental study rather than a novel algorithm. It (i) compares transparent rule and lexical baselines with both an LSTM and a contemporary pretrained Transformer; (ii) reports SacreBLEU, chrF, character error rate (CER), word error rate (WER), n-gram precision, and a legacy position-wise token measure; (iii) quantifies MLE out-of-vocabulary (OOV) behavior and the regex fallback; and (iv) adds independent human checks of test-reference validity and training-pair alignment. This scope avoids treating one word-level LSTM as representative of neural de-romanization in general.
+The contribution is an audited experimental study rather than a novel algorithm. It (i) compares transparent rule and lexical baselines with both an LSTM and a contemporary pretrained Transformer; (ii) reports SacreBLEU, chrF, character error rate (CER), word error rate (WER), n-gram precision, and a legacy position-wise token measure; (iii) quantifies MLE out-of-vocabulary (OOV) behavior and the regex fallback; and (iv) adds independent human checks of test-reference validity and training-pair alignment, plus a qualitative review of LSTM errors. This scope avoids treating one word-level LSTM as representative of neural de-romanization in general.
 
 \section{Dataset and Quality Control}
 
 \subsection{Corpus Source and Splits}
 
-The parallel data come from the UBC-NLP NileChat Arabizi-Morocco resource distributed on Hugging Face as \texttt{UBC-NLP/nilechat-arabizi-mor}. According to its dataset card, Arabic-script Moroccan material from fineweb-edu-Morocco and LHV-Morocco was converted to Arabizi with CohereLabs' Command R+ (August 2024 release); the Arabizi is therefore generated rather than naturally typed by social-media users. The creators request citation of the NileChat paper \citep{el-mekki-etal-2025-nilechat}, and the dataset is released under the Creative Commons Attribution-NonCommercial 4.0 license. The fixed experimental export contains 6,436 training, 804 validation, and 805 held-out test passage pairs. The archived artifacts verify that the test export was excluded from model fitting. The source revision, upstream subset-selection procedure, split method, and complete history of test-informed rule development were not preserved, so stronger historical claims about an ``untouched'' test set are avoided. Exact SHA-256 identifiers for all three frozen splits are stored in the released \texttt{run\_manifest.json}.
+The parallel data come from the UBC-NLP NileChat Arabizi-Morocco resource distributed on Hugging Face as \texttt{UBC-NLP/nilechat-arabizi-mor}. According to its dataset card, Arabic-script Moroccan material from fineweb-edu-Morocco and LHV-Morocco was converted to Arabizi with CohereLabs' Command R+ (August 2024 release); the Arabizi is therefore generated rather than naturally typed by social-media users. The creators request citation of the NileChat paper \citep{el-mekki-etal-2025-nilechat}, and the dataset is released under the Creative Commons Attribution-NonCommercial 4.0 license. The fixed experimental export contains 6,436 training, 804 validation, and 805 held-out test passage pairs. The archived artifacts verify that the test export was excluded from model fitting. The recovered preprocessing notebook documents two successive random splits with seed 42, assigning 80\% of the cleaned corpus to training and dividing the remainder equally between validation and test. Reconstructing this procedure reproduced all archived partitions exactly in identifiers, source text, target text, and row order. The source revision, upstream subset-selection procedure, original corpus-deduplication operation, and complete history of test-informed rule development were not preserved, so stronger historical claims about an ``untouched'' test set are avoided. Before partitioning, the recovered code removes URLs, reduces character runs of three or more to two, replaces selected punctuation with spaces, and filters out Arabizi containing Arabic-block characters, empty sides, and word-count ratios outside $[0.5,2.0]$. In the saved run, these row filters removed none of the 8,045 already-cleaned input rows. The original upstream retrieval and corpus-deduplication code are absent from the recovered notebook. Exact SHA-256 identifiers for all three frozen splits are stored in the released \texttt{run\_manifest.json}.
 
 After whitespace normalization, exact cross-split overlap was checked for identifiers, source strings, target strings, and source--target pairs, both before and after the experiment's normalization. No exact overlaps were found. A separate lowercased whitespace-token trigram term frequency--inverse document frequency screen, capped at 200,000 features and excluding exact matches, found no train/validation/test candidates at cosine similarity $\geq 0.85$. This heuristic screen can miss paraphrases and spelling variants. A post-hoc identifier check also found 28 normalized prefixes shared by train and test, affecting 38 test rows, after removing each identifier's final underscore-delimited component. The upstream meaning of these prefixes could not be reconstructed. These rows are neither exact text duplicates nor above-threshold trigram matches, but source-document group independence is therefore unverified.
 
@@ -62,7 +63,7 @@ Two native Moroccan Arabic speakers separately reviewed a random sample of 300 h
 
 \subsection{Normalization}
 
-The executed pipeline does not apply CAMeL Tools script standardization. It uses custom whitespace cleanup, lowercasing of Arabizi where required by a model, and limited token normalization for aligned qualitative analysis. Arabic spelling, punctuation, and diacritics are not normalized in the main metrics. CAMeL Tools is therefore discussed as relevant infrastructure \citep{obeid-etal-2020-camel}, not as an executed component.
+The executed pipeline uses custom whitespace cleanup, lowercasing of Arabizi where required by a model, and limited token normalization for aligned qualitative analysis. Arabic spelling, punctuation, and diacritics are not normalized in the main metrics.
 
 \section{Systems}
 
@@ -109,11 +110,13 @@ All reported primary scores use the same 805 frozen test passages after collapsi
 
 The legacy position-wise exact-match score, renamed \emph{position-wise token agreement} (PosEM), counts identical whitespace tokens at the same index and divides by the number of reference tokens. It is retained for comparability with the submitted experiment, but it is not standard word accuracy: a single insertion shifts later matches, while extra trailing prediction tokens are not penalized. This explains why PosEM can be low even when BLEU is substantially higher; BLEU gives partial credit for matching n-grams found elsewhere in the passage.
 
+A post-hoc paired bootstrap analysis \citep{koehn-2004-statistical} resamples complete test passages with replacement 10,000 times (seed 42), using identical sampled indices for all four systems. It reports percentile 95\% confidence intervals for BLEU and for the mT5-minus-MLE difference. The focal BLEU comparison also uses SacreBLEU's paired bootstrap significance test with the same resample count and seed. All 805 passages, including decoding failures, are retained. The intervals are conditional on the saved models and an independent-passage resampling assumption; they do not quantify training-seed variability or account for unverified source-document grouping.
+
 \section{Results}
 
 \subsection{Blind-Test Benchmark}
 
-Table~\ref{tab:main-results} gives the primary results. mT5 has the highest BLEU and PosEM, but MLE has the highest chrF and the lowest CER and WER. The finding is therefore metric-dependent. In particular, the LSTM improves over the regex baseline in BLEU and chrF but has worse CER, so it is not uniformly better. The 1.31-point BLEU difference between mT5 and MLE is an observed point estimate; no paired significance test or confidence interval was computed, so it should not be interpreted as statistically established superiority.
+Table~\ref{tab:main-results} gives the primary results. mT5 has the highest observed BLEU and PosEM, but MLE has the highest chrF and the lowest CER and WER. The finding is therefore metric-dependent. In particular, the LSTM improves over the regex baseline in BLEU and chrF but has worse CER, so it is not uniformly better. The BLEU 95\% intervals are [34.84, 38.71] for mT5 and [34.80, 36.08] for MLE. Their observed difference is 1.31 points, with a paired difference interval of [$-0.55$, 3.24] and paired-bootstrap $p=0.074$. This focal comparison does not establish a BLEU advantage at the nominal 0.05 level; it also does not demonstrate equivalence. The aggregate reproducibility record includes intervals for all four systems.
 
 \begin{table}[H]
 \centering
@@ -134,24 +137,14 @@ mT5-small & \textbf{36.75} & 68.86 & 42.86 & 64.03 & \textbf{21.54} \\
 \end{tabular}
 \end{table}
 
-Individual BLEU precisions in Table~\ref{tab:ngram} add detail but do not by themselves prove contextual reasoning. MLE has the strongest unigram and bigram precision, while mT5 is strongest at trigrams and four-grams. The flatter mT5 curve is consistent with better preservation of longer spans, but external pretraining and access to full passages are confounds.
+Individual BLEU precisions in Fig.~\ref{fig:ngram} add detail but do not by themselves prove contextual reasoning. MLE has the strongest unigram and bigram precision, while mT5 is strongest at trigrams and four-grams. The flatter mT5 curve is consistent with better preservation of longer spans, but external pretraining and access to full passages are confounds. The LSTM decodes words independently and does not use sentence context.
 
-\begin{table}[H]
+\begin{figure}[H]
 \centering
-\caption{Blind-test modified n-gram precisions (\%).}
-\label{tab:ngram}
-\small
-\begin{tabular}{lrrrr}
-\toprule
-\textbf{System} & \textbf{1-gram} & \textbf{2-gram} & \textbf{3-gram} & \textbf{4-gram} \\
-\midrule
-Rule mapper & 35.62 & 12.61 & 4.44 & 1.58 \\
-MLE + regex & \textbf{67.80} & \textbf{43.78} & 29.12 & 19.49 \\
-Word LSTM & 43.93 & 16.44 & 6.30 & 2.43 \\
-mT5-small & 56.23 & 41.37 & \textbf{31.77} & \textbf{24.68} \\
-\bottomrule
-\end{tabular}
-\end{table}
+\includegraphics[width=\linewidth]{figures/ngram_precision.png}
+\caption{Modified n-gram precision on all 805 blind-test passages. Markers and line styles distinguish systems in grayscale. These corpus overlap curves are descriptive, not a controlled test of contextual reasoning.}
+\label{fig:ngram}
+\end{figure}
 
 \subsection{MLE Coverage and Fallback}
 
@@ -224,7 +217,7 @@ mT5-small & \textbf{37.20} & 69.47 & 40.25 & 61.51 & \textbf{20.89} \\
 
 The 50 apparent LSTM errors were drawn from the 300-row human-validated subset. Predicted and reference token sequences were lightly normalized for punctuation, Arabic diacritics, alef variants, and alef maqsura, then aligned with \texttt{SequenceMatcher}. Unequal-length replacement spans were excluded from the review pool to reduce false pairings caused by word-position shifts; 50 remaining cases were sampled with random seed 42. An initial human review classified 42 as true model errors, 6 as acceptable variants or non-errors, and 2 as uncertain. The reviewer could assign multiple contributing labels. For summary reporting, one primary label was selected by the fixed priority order lexical substitution, phonetic ambiguity, numerical transliteration, clitic segmentation, loanword/code-switching, punctuation, alignment shift, source noise, gold-reference issue, no error, and other. This reduction yields 22 lexical substitutions, 19 phonetic ambiguities, and one source-noise case among the 42 true errors; these are derived primary categories rather than mutually exclusive labels originally selected by the reviewer.
 
-For camera-ready adjudication, two reviewers re-examined the disputed case \textit{w7a} $\rightarrow$ \textarabic{والحال} (reference \textarabic{واخا}) with its full passage context and agreed that it should be labeled uncertain rather than acceptable. They assigned \textit{other} as the primary type and source noise as a contributing factor: in their rationale, 7 encodes \textarabic{ح}, whereas the contextual form requires the \textarabic{خ} sound, commonly encoded by 5. The final counts are therefore 42 true model errors, 5 acceptable variants or non-errors, and 3 uncertain cases. The small, error-conditioned sample cannot estimate corpus accuracy or the population distribution of error types, and no comparable human review was conducted for mT5.
+For camera-ready adjudication, two reviewers re-examined the disputed case \textit{w7a} $\rightarrow$ \textarabic{والحال} (reference \textarabic{واخا}) with its full passage context and agreed that it should be labeled uncertain rather than acceptable. They assigned \textit{other} as the primary type and source noise as a contributing factor: in their rationale, 7 encodes \textarabic{ح}, whereas the contextual form requires the \textarabic{خ} sound, commonly encoded by 5. The final counts are therefore 42 true model errors, 5 acceptable variants or non-errors, and 3 uncertain cases. The small, error-conditioned sample cannot estimate corpus accuracy or the population distribution of error types.
 
 \begin{table}[H]
 \centering
@@ -256,13 +249,13 @@ The originality of this work lies in its focused Maghribi Arabizi benchmark and 
 
 \section{Conclusion}
 
-This study established an audited four-system benchmark for Moroccan Arabizi de-romanization. No system dominates every evaluation dimension. Under a configuration that jointly changes architecture, parameter count, subword tokenization, external pretraining, passage context, and access to training passages, mT5 achieves the highest observed BLEU, position-wise token agreement, and longer n-gram precision. The MLE mapper with regex fallback instead produces the best chrF, CER, and WER, indicating stronger character- and word-level form fidelity on this benchmark. Seventy-eight mT5 outputs do not emit EOS within the configured limit; their repetitions sharply increase edit distance despite the model's higher corpus BLEU.
+This study established an audited four-system benchmark for Moroccan Arabizi de-romanization. No system dominates every evaluation dimension. Under a configuration that jointly changes architecture, parameter count, subword tokenization, external pretraining, passage context, and access to training passages, mT5 achieves the highest observed BLEU, position-wise token agreement, and longer n-gram precision. However, the paired bootstrap analysis does not establish its 1.31-point BLEU lead over MLE at the 0.05 level. The MLE mapper with regex fallback instead produces the best chrF, CER, and WER, indicating stronger character- and word-level form fidelity on this benchmark. Seventy-eight mT5 outputs do not emit EOS within the configured limit; their repetitions sharply increase edit distance despite the model's higher corpus BLEU.
 
-The comparison therefore reveals complementary strengths rather than a single universal winner. The rule mapper offers transparency but limited lexical knowledge; MLE exploits observed lexical regularities and an effective fallback; the word-level LSTM learns local character correspondences but is constrained by noisy positional alignment; and mT5 achieves stronger longer-span overlap while its generation failures contribute large edit penalties. The ranking changes with the metric because the systems fail differently. The human audits add a second conclusion: positional alignment quality, source noise, and valid dialectal spelling variation are central experimental variables. These findings define the benchmark's value without treating the generated Arabizi resource as a substitute for evaluation on naturally authored text.
+The comparison therefore reveals complementary strengths rather than a single universal winner. The rule mapper offers transparency but limited lexical knowledge; MLE exploits observed lexical regularities and an effective fallback; the word-level LSTM learns local character correspondences but is constrained by noisy positional alignment; and mT5 achieves stronger longer-span overlap while its generation failures contribute large edit penalties. The ranking changes with the metric because the systems fail differently. The human audits show that positional alignment quality, source noise, and valid dialectal spelling variation are central experimental variables. These findings define the benchmark's value without treating the generated Arabizi resource as a substitute for evaluation on naturally authored text or the automatic ranking as evidence of human preference.
 
 \section*{Limitations}
 
-The source-side Arabizi was generated from Arabic-script Moroccan material, so transfer to naturally authored Arabizi, code-switching, and real-user spelling distributions remains untested. The full-passage Transformer is not an architecture-only comparison with the two word-level learned systems because it also differs in pretraining, scale, tokenization, context, and training-data eligibility; only one fine-tuning seed is reported. The exact original mT5 training script was not preserved: the archived resumable runner differs from the successful run in evaluation/checkpoint frequency, although the executed configuration and log are retained. The 2,048-token generation limit was fixed before inference, yet 9.69\% of outputs do not emit EOS within it. MLE and the LSTM are trained from only 10.75\% of passages and inherit positional alignment noise. The 100-pair alignment audit is occurrence-weighted and not a corpus prevalence estimate; the 50-case LSTM error review is small and error-conditioned, and its disputed source-noise case required full-context consensus adjudication; no mT5 output review was conducted. The 300-row reference audit contains no negative labels, making Cohen's $\kappa$ undefined. Upstream split construction and source-group semantics could not be reconstructed, and shared identifier prefixes mean source-document independence is unverified. The near-duplicate search is heuristic, and BLEU, chrF, CER, WER, and PosEM remain reference-sensitive when several dialectal spellings are acceptable.
+The source-side Arabizi was generated from Arabic-script Moroccan material, so transfer to naturally authored Arabizi, code-switching, and real-user spelling distributions remains untested. The full-passage Transformer is not an architecture-only comparison with the two word-level learned systems because it also differs in pretraining, scale, tokenization, context, and training-data eligibility; only one fine-tuning seed is reported. The exact original mT5 training script was not preserved: the archived resumable runner differs from the successful run in evaluation/checkpoint frequency, although the executed configuration and log are retained. The 2,048-token generation limit was fixed before inference, yet 9.69\% of outputs do not emit EOS within it. MLE and the LSTM are trained from only 10.75\% of passages and inherit positional alignment noise. The 100-pair alignment audit is occurrence-weighted and not a corpus prevalence estimate; the 50-case LSTM error review is small and error-conditioned, and its disputed source-noise case required full-context consensus adjudication. An exploratory blinded mT5--MLE output review was completed on 50 random passages and 10 additional decoding-failure cases, but is not used to validate the automatic ranking: whole-passage acceptability labels were nearly constant, preferences differed between reviewers, and two acceptability judgments remained unresolved. Its aggregate results are retained in the audit record; no human-preference advantage is claimed. The 300-row reference audit contains no negative labels, making Cohen's $\kappa$ undefined. Upstream subset construction and source-group semantics could not be reconstructed, and shared identifier prefixes mean source-document independence is unverified. The near-duplicate search is heuristic, and BLEU, chrF, CER, WER, and PosEM remain reference-sensitive when several dialectal spellings are acceptable.
 
 \section*{Ethical Considerations and AI-Use Disclosure}
 
@@ -270,7 +263,11 @@ The resource contains social-media-style language that may include noisy, person
 
 Generative AI tools were used for code debugging, editorial feedback, and manuscript revision support. The author verified the experimental claims, reported values, citations, and methodological descriptions against the executed notebooks, saved outputs, and annotation files.
 
-\paragraph{Data and Code Availability.} Code, split identifiers, file hashes, aggregate annotation summaries, and aggregate evaluation artifacts are available at \url{https://github.com/A-Nafissi/Arabizi-into-Arabic-Script}. Full passage text and raw annotation workbooks are not redistributed. Access to the source corpus remains governed by the upstream Hugging Face access conditions and CC BY-NC 4.0 license.
+\noindent\begin{minipage}{\linewidth}
+\paragraph{Data and Code Availability.} Code, split identifiers, file hashes, aggregate annotation summaries, and aggregate evaluation artifacts are maintained in a private GitHub repository:\par\noindent
+\url{https://github.com/A-Nafissi/Arabizi-into-Arabic-Script}\par\noindent
+Repository access is available on request from the author using the email address listed above. Full passage text and raw annotation workbooks are not redistributed. Access to the source corpus remains governed by the upstream Hugging Face access conditions and CC BY-NC 4.0 license.
+\end{minipage}
 
 \paragraph{Disclosure of Interests.} The author has no competing interests to declare that are relevant to the content of this article.
 

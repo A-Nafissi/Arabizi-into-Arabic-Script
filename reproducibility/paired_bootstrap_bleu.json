@@ -1,0 +1,82 @@
+{
+  "rows": 805,
+  "resampling_unit": "passage",
+  "samples": 10000,
+  "seed": 42,
+  "sacrebleu_version": "2.6.0",
+  "systems": {
+    "Rule mapper": {
+      "BLEU": 7.242054459100732,
+      "BLEU_95_percentile_CI": [
+        6.984654117666424,
+        7.512914760213099
+      ],
+      "precisions": [
+        35.61936968824203,
+        12.611300049511781,
+        4.4413499945032795,
+        1.5792741711465874
+      ]
+    },
+    "MLE + regex": {
+      "BLEU": 35.4385212952767,
+      "BLEU_95_percentile_CI": [
+        34.79867063289302,
+        36.076494018909806
+      ],
+      "precisions": [
+        67.79864560178466,
+        43.78151528690879,
+        29.117490504948634,
+        19.486714151496415
+      ]
+    },
+    "Word LSTM": {
+      "BLEU": 9.619273193552782,
+      "BLEU_95_percentile_CI": [
+        9.37088553363398,
+        9.867764924555606
+      ],
+      "precisions": [
+        43.92747533720054,
+        16.43519098832594,
+        6.304055272105279,
+        2.433914960205953
+      ]
+    },
+    "mT5-small": {
+      "BLEU": 36.74832041014184,
+      "BLEU_95_percentile_CI": [
+        34.84246432432794,
+        38.714904238692135
+      ],
+      "precisions": [
+        56.22655335032661,
+        41.365053353299615,
+        31.772374202157792,
+        24.67886926642413
+      ]
+    }
+  },
+  "focal_comparison": {
+    "contrast": "mT5-small minus MLE + regex",
+    "BLEU_difference": 1.309799114865136,
+    "difference_95_percentile_CI": [
+      -0.5527344272715314,
+      3.235173514473944
+    ],
+    "sacrebleu_paired_bootstrap_p": 0.0744925507449255,
+    "zero_contrast_policy": "A zero observed BLEU difference is reported with p = 1.",
+    "test_signature": "nrefs:1|bs:10000|seed:42|case:mixed|eff:no|tok:intl|smooth:exp|version:2.6.0"
+  },
+  "interpretation": [
+    "Post-hoc focal BLEU comparison; all test passages and decoding failures retained.",
+    "Percentile intervals use paired sampling; p-value uses SacreBLEU's paired bootstrap test.",
+    "Conditional on the saved models and an independent-passage resampling assumption.",
+    "Does not measure training-seed variability or resolve unverified source-document grouping."
+  ],
+  "input_sha256": {
+    "baseline_predictions": "6579d4cca6bb2a721ba306b5456538b19987f68321210ea19d2e46f90298acea",
+    "mt5_predictions": "b94cc9f37b8e8c7fdca1322ef5cc82bb18c8d780c31128b646cb56570a8a5cb7"
+  }
+}

@@ -59,3 +59,11 @@ Thumbs.db
 # IDE specific files
 .vscode/
 .idea/
+
+# Authorized preprocessing corpus and local verification outputs
+data/clean_parallel_corpus.csv
+data/clean_parallel_corpus.xlsx
+results/local_*
+
+# Root manuscript PDF is the distributed copy
+paper/*.pdf

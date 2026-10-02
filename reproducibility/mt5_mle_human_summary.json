@@ -1,0 +1,316 @@
+{
+  "status": "independent_labels_completed_not_adjudicated",
+  "manuscript_reporting": {
+    "status": "archived_exploratory_not_in_main_results",
+    "disclosed_in_limitations": true,
+    "reason": "The author discontinued this additional review for the current manuscript scope. Whole-passage acceptability labels are nearly constant, reviewer preferences differ, and two acceptability judgments remain unresolved. The results are preserved; no claim of human-preference superiority is made.",
+    "original_labels_preserved": true
+  },
+  "strata": {
+    "random": {
+      "passages": 50,
+      "per_model": {
+        "MLE + regex": {
+          "annotator_A": {
+            "acceptable": 0,
+            "inaccurate": 50,
+            "uncertain": 0
+          },
+          "annotator_B": {
+            "acceptable": 0,
+            "inaccurate": 50,
+            "uncertain": 0
+          },
+          "agreement": {
+            "items": 50,
+            "observed_agreement_percent": 100.0,
+            "cohen_kappa": null
+          }
+        },
+        "mT5-small": {
+          "annotator_A": {
+            "acceptable": 0,
+            "inaccurate": 50,
+            "uncertain": 0
+          },
+          "annotator_B": {
+            "acceptable": 2,
+            "inaccurate": 48,
+            "uncertain": 0
+          },
+          "agreement": {
+            "items": 50,
+            "observed_agreement_percent": 96.0,
+            "cohen_kappa": 0.0
+          }
+        }
+      },
+      "preferences_by_annotator": [
+        {
+          "MLE + regex": 18,
+          "mT5-small": 25,
+          "tie": 7,
+          "uncertain": 0
+        },
+        {
+          "MLE + regex": 36,
+          "mT5-small": 14,
+          "tie": 0,
+          "uncertain": 0
+        }
+      ],
+      "preference_agreement": {
+        "items": 50,
+        "observed_agreement_percent": 48.0,
+        "cohen_kappa": 0.13448735019973365
+      },
+      "preference_confusion": [
+        {
+          "annotator_A": "MLE + regex",
+          "annotator_B": "MLE + regex",
+          "count": 15
+        },
+        {
+          "annotator_A": "MLE + regex",
+          "annotator_B": "mT5-small",
+          "count": 3
+        },
+        {
+          "annotator_A": "MLE + regex",
+          "annotator_B": "tie",
+          "count": 0
+        },
+        {
+          "annotator_A": "MLE + regex",
+          "annotator_B": "uncertain",
+          "count": 0
+        },
+        {
+          "annotator_A": "mT5-small",
+          "annotator_B": "MLE + regex",
+          "count": 16
+        },
+        {
+          "annotator_A": "mT5-small",
+          "annotator_B": "mT5-small",
+          "count": 9
+        },
+        {
+          "annotator_A": "mT5-small",
+          "annotator_B": "tie",
+          "count": 0
+        },
+        {
+          "annotator_A": "mT5-small",
+          "annotator_B": "uncertain",
+          "count": 0
+        },
+        {
+          "annotator_A": "tie",
+          "annotator_B": "MLE + regex",
+          "count": 5
+        },
+        {
+          "annotator_A": "tie",
+          "annotator_B": "mT5-small",
+          "count": 2
+        },
+        {
+          "annotator_A": "tie",
+          "annotator_B": "tie",
+          "count": 0
+        },
+        {
+          "annotator_A": "tie",
+          "annotator_B": "uncertain",
+          "count": 0
+        },
+        {
+          "annotator_A": "uncertain",
+          "annotator_B": "MLE + regex",
+          "count": 0
+        },
+        {
+          "annotator_A": "uncertain",
+          "annotator_B": "mT5-small",
+          "count": 0
+        },
+        {
+          "annotator_A": "uncertain",
+          "annotator_B": "tie",
+          "count": 0
+        },
+        {
+          "annotator_A": "uncertain",
+          "annotator_B": "uncertain",
+          "count": 0
+        }
+      ]
+    },
+    "additional_no_eos": {
+      "passages": 10,
+      "per_model": {
+        "MLE + regex": {
+          "annotator_A": {
+            "acceptable": 0,
+            "inaccurate": 10,
+            "uncertain": 0
+          },
+          "annotator_B": {
+            "acceptable": 0,
+            "inaccurate": 10,
+            "uncertain": 0
+          },
+          "agreement": {
+            "items": 10,
+            "observed_agreement_percent": 100.0,
+            "cohen_kappa": null
+          }
+        },
+        "mT5-small": {
+          "annotator_A": {
+            "acceptable": 0,
+            "inaccurate": 10,
+            "uncertain": 0
+          },
+          "annotator_B": {
+            "acceptable": 0,
+            "inaccurate": 10,
+            "uncertain": 0
+          },
+          "agreement": {
+            "items": 10,
+            "observed_agreement_percent": 100.0,
+            "cohen_kappa": null
+          }
+        }
+      },
+      "preferences_by_annotator": [
+        {
+          "MLE + regex": 9,
+          "mT5-small": 1,
+          "tie": 0,
+          "uncertain": 0
+        },
+        {
+          "MLE + regex": 10,
+          "mT5-small": 0,
+          "tie": 0,
+          "uncertain": 0
+        }
+      ],
+      "preference_agreement": {
+        "items": 10,
+        "observed_agreement_percent": 90.0,
+        "cohen_kappa": 0.0
+      },
+      "preference_confusion": [
+        {
+          "annotator_A": "MLE + regex",
+          "annotator_B": "MLE + regex",
+          "count": 9
+        },
+        {
+          "annotator_A": "MLE + regex",
+          "annotator_B": "mT5-small",
+          "count": 0
+        },
+        {
+          "annotator_A": "MLE + regex",
+          "annotator_B": "tie",
+          "count": 0
+        },
+        {
+          "annotator_A": "MLE + regex",
+          "annotator_B": "uncertain",
+          "count": 0
+        },
+        {
+          "annotator_A": "mT5-small",
+          "annotator_B": "MLE + regex",
+          "count": 1
+        },
+        {
+          "annotator_A": "mT5-small",
+          "annotator_B": "mT5-small",
+          "count": 0
+        },
+        {
+          "annotator_A": "mT5-small",
+          "annotator_B": "tie",
+          "count": 0
+        },
+        {
+          "annotator_A": "mT5-small",
+          "annotator_B": "uncertain",
+          "count": 0
+        },
+        {
+          "annotator_A": "tie",
+          "annotator_B": "MLE + regex",
+          "count": 0
+        },
+        {
+          "annotator_A": "tie",
+          "annotator_B": "mT5-small",
+          "count": 0
+        },
+        {
+          "annotator_A": "tie",
+          "annotator_B": "tie",
+          "count": 0
+        },
+        {
+          "annotator_A": "tie",
+          "annotator_B": "uncertain",
+          "count": 0
+        },
+        {
+          "annotator_A": "uncertain",
+          "annotator_B": "MLE + regex",
+          "count": 0
+        },
+        {
+          "annotator_A": "uncertain",
+          "annotator_B": "mT5-small",
+          "count": 0
+        },
+        {
+          "annotator_A": "uncertain",
+          "annotator_B": "tie",
+          "count": 0
+        },
+        {
+          "annotator_A": "uncertain",
+          "annotator_B": "uncertain",
+          "count": 0
+        }
+      ]
+    }
+  },
+  "guardrails": [
+    "No automatic consensus or relabeling; disagreements require explicit adjudication.",
+    "Report the additional no-EOS diagnostic sample separately from the random sample.",
+    "Judgments concern generated-corpus outputs, not naturally authored Arabizi transfer."
+  ],
+  "protocol": {
+    "annotators": 2,
+    "independent_and_blinded": true,
+    "independence_confirmation": "Confirmed directly by the author after return of both files.",
+    "seed": 42,
+    "random_passages": 50,
+    "additional_no_eos_passages": 10,
+    "whole_passage_acceptability": "Acceptable only without a substantive content error; valid spelling variants are allowed."
+  },
+  "validation": {
+    "reviewed_passages": 60,
+    "candidate_judgments_per_annotator": 120,
+    "original_text_unchanged": true,
+    "all_labels_complete_and_valid": true,
+    "blinding_key_matches_frozen_predictions": true,
+    "annotator_A_sha256": "5aa0c4a9245ce688040ec1c3f3f156b9396387f88a37fda93f90d33302bdf824",
+    "annotator_B_sha256": "92f7416891f940d3c472c7f25889524f03f331b481c71294d5dc7bab9c5daec0",
+    "template_sha256": "ea3ace0455867f6a7d3caafd7cd7e014b6e7c80f1c8a1c1c46ef6619ecd0679c"
+  },
+  "pending_acceptability_adjudications": 2
+}

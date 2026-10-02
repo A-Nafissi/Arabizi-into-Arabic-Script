@@ -25,3 +25,7 @@ Get-FileHash -Algorithm SHA256 data/toy_train.csv, data/toy_val.csv, data/toy_te
 
 The `toy_` prefix is historical. These are the complete experimental exports,
 not small demonstration datasets.
+
+## Recovered split procedure
+
+The recovered notebook performs `train_test_split(corpus, test_size=0.2, random_state=42)`, followed by `train_test_split(temporary, test_size=0.5, random_state=42)`. Reconstruction from the authorized clean corpus reproduces the archived splits in content and order. The ZIP CSV byte hashes differ from the frozen files, but decoded IDs and texts match exactly; preserve frozen byte hashes for the mT5 runner. Keep `clean_parallel_corpus.csv` locally here to run preprocessing. Do not overwrite frozen exports merely to normalize CSV encoding or line endings. Original upstream selection/revision and deduplication code remain unavailable.
