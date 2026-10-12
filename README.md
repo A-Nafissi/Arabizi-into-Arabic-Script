@@ -7,13 +7,15 @@
 [![Dataset: CC BY-NC 4.0](https://img.shields.io/badge/data-CC%20BY--NC%204.0-orange.svg)](DATA_LICENSE.md)
 [![Paper: PDF](https://img.shields.io/badge/paper-camera--ready-red.svg)](<Breaking the Script Barrier Automatic De_Romanization of Maghribi Arabizi to Arabic Script in Social Media.pdf>)
 
-This repository accompanies a paper accepted at the **9th International
-Conference on Arabic Language Processing (ICALP 2026)**. The included PDF is the
-author's camera-ready manuscript, not the final Springer version of record.
+This repository accompanies a paper accepted for camera-ready at the **9th
+International Conference on Arabic Language Processing (ICALP 2026)**. The revised
+manuscript has been submitted; final confirmation is pending. The included PDF is
+the author's camera-ready manuscript, not the final Springer version of record.
 
-The GitHub repository is currently private. Request code and aggregate-artifact
-access from the author at **abdessamadnfs@gmail.com**. Repository access does not
-grant access to the upstream gated corpus or permit redistribution of passage text.
+The research code and aggregate evidence are released under the licensing terms
+described below. Code access does not grant access to the upstream gated corpus
+or permit redistribution of passage text. Questions and reproduction inquiries:
+**abdessamadnfs@gmail.com**.
 
 The project evaluates automatic de-romanization of Moroccan Arabizi into Arabic
 script. The benchmark uses a frozen export derived from the UBC-NLP

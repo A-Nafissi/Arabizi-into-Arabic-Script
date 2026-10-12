@@ -67,3 +67,12 @@ results/local_*
 
 # Root manuscript PDF is the distributed copy
 paper/*.pdf
+
+# Credentials and local passage-level exports
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*_predictions.csv
+*_predictions.jsonl

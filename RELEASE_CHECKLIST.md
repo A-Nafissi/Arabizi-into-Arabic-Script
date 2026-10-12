@@ -34,3 +34,19 @@
 - [x] Undefined reference-audit kappa reported correctly.
 - [x] Credentials removed from every uploaded notebook.
 - [ ] Account owner must revoke the exposed Hugging Face token; revocation cannot be confirmed from this workspace.
+
+## Open-source release review (2026-10-12)
+
+- [x] Reviewed all 84 historical file blobs reachable before this release; no Hugging Face/GitHub/AWS credential patterns or private-key headers found.
+- [x] Historical CSV paths contain split IDs and aggregate metrics only; no full corpus exports or trained weights are included.
+- [x] Reviewed retained notebook outputs: preprocessing counts and audit summaries only.
+- [x] Corrected stray text in the MIT license and clarified public code/data separation.
+- [x] Retained camera-ready status and documented reproduction limitations.
+
+The earlier token-revocation reminder above remains unresolved; a clean repository
+scan does not establish whether a previously exposed token was revoked.
+
+Validation for this release: 15 pytest regression/release tests and 7 baseline
+utility tests passed. The 2 PyTorch/Transformers-dependent tests were not run
+in this lightweight review environment. Training and benchmark experiments
+were not rerun for these documentation and licensing changes.

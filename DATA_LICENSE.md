@@ -22,3 +22,11 @@ experimental split, while `data/README.md` records the expected file hashes and
 local placement. Users must obtain the source data through the upstream access
 process. Reuse must remain noncommercial, preserve attribution, and comply with
 the upstream access terms.
+
+## Manuscript
+
+The MIT license applies to the project code and its software documentation.
+The camera-ready manuscript, LaTeX source, bibliography, and paper figures are
+provided for scholarly reference and are excluded from that software license.
+Their availability does not establish a separate open-content license or change
+any publisher agreement. Cite the paper using `CITATION.cff`.
